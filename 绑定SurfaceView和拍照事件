@@ -1,0 +1,67 @@
+ mPicturecallback = new Camera.PictureCallback() {//得到照片后的处理
+            @Override
+            public void onPictureTaken(byte[] data, Camera camera) {
+                if (null != data) {
+                    File tempFileDir = new File(PHOTOPATH);
+                    if (!tempFileDir.exists()) {
+                        tempFileDir.mkdir();
+                    }
+                    File tempFile = new File(tempFileDir, mphotoname + System.currentTimeMillis() + ".jpg");
+//文件地址
+                    //照片旋转90度
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);//将照片数据data放入bitmap对象
+                    bitmap = rotateBitmap(bitmap, 90);//自己写的旋转函数
+                    try {
+                        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(tempFile));//文件传进buffer
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bos);//将file压入bitmap设置格式jpeg
+                        try {
+                            bos.flush();//压入
+                            bos.close();//关闭
+                        }catch (IOException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }catch (FileNotFoundException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    Toast.makeText(getBaseContext(), "拍照成功", Toast.LENGTH_SHORT).show();
+                    mCamera.startPreview();//相机重新开启预览
+                }
+            }
+        };
+
+        mtakephoto.setOnClickListener(new View.OnClickListener() {  //拍照键处理
+            @Override
+            public void onClick(View v) {
+                requestAllpower();
+                Camera.Parameters parameters = mCamera.getParameters();
+                parameters.setPreviewSize(400, 240);
+                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);//聚焦
+                mCamera.autoFocus(new Camera.AutoFocusCallback() {
+                    @Override
+                    public void onAutoFocus(boolean success, Camera camera) {
+                        //success代表对焦是否准确
+                        if (success) {
+                            mCamera.takePicture(null, null, mPicturecallback);//拍照
+                        }
+                    }
+                });
+
+            }
+        });
+
+
+    private Bitmap rotateBitmap(Bitmap bitmap, int degrees) {//照片旋转函数，在mpicturecallback中调用
+        if (degrees == 0 || null == bitmap) {
+            return bitmap;
+        }
+        Matrix matrix = new Matrix();
+        matrix.setRotate(degrees, bitmap.getWidth() / 2, bitmap.getHeight() / 2);
+        Bitmap bmp = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        bitmap.recycle();
+        return bmp;
+    }
+
+
+

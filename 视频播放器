@@ -1,0 +1,33 @@
+    public void StartVideoRecording(){//开始录制视频
+        mMediaRecorder = new MediaRecorder();
+        mCamera.unlock();//必要！
+        mMediaRecorder.reset();
+        mMediaRecorder.setCamera(mCamera);//绑定到相机对象
+        mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);//声源
+        mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);//视频源
+        mMediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_720P));//视频清晰度设置
+        mMediaRecorder.setOrientationHint(90);//保存翻转90度
+        File tempfilEDir = new File(VIDEOPATH);
+        if(!tempfilEDir.exists())
+            tempfilEDir.mkdir();
+        mMediaRecorder.setOutputFile(VIDEOPATH+ mvideoname
+        +System.currentTimeMillis()+".mp4");
+        //预览视频流，在指定了录制源和输出文件后，在prepare前设置
+        mMediaRecorder.setPreviewDisplay(mholder.getSurface());
+        //准备录制
+        try {
+            mMediaRecorder.prepare();
+            mMediaRecorder.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void StopVideoRecording(){//停止录像
+            if(mMediaRecorder!=null ) {
+                mMediaRecorder.stop();
+                mMediaRecorder.release();
+                mMediaRecorder = null;
+                mCamera.lock();
+            }
+    }

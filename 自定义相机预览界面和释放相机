@@ -1,0 +1,38 @@
+mholder = msurfaceview.getHolder();//存放预览界面  
+        mholder.addCallback(new SurfaceHolder.Callback() {//重写三个方法
+            @Override
+            public void surfaceCreated(SurfaceHolder surfaceHolder) {
+                mCamera = getCamera();
+                if (mCamera != null) {
+                    try {
+                        mCamera.setDisplayOrientation(90);//预览界面旋转90度
+                        mCamera.setPreviewDisplay(surfaceHolder);
+                        mCamera.startPreview();//启动预览
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            @Override
+            public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {//界面改变
+            }
+            @Override
+            public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+                releaseCamera();//释放相机
+            }
+        });
+        mholder.setType( SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        mCamera=getCamera();
+        if (mCamera!=null){
+            try {
+                mCamera.setPreviewDisplay( mholder );设置预览  画面持有者holder
+                mCamera.startPreview();//开始预览
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+释放相机
+camera对象  mCamera.release();
+	    mCamera = null;
