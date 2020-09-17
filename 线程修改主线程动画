@@ -1,0 +1,46 @@
+            public void run()
+            {
+                super.run();
+                //定时器
+//                Log.d(TAG,"thread start") ;
+                timer = new Timer();
+                task = new TimerTask() {
+                    private int cout = 0;
+                    @Override
+                    public void run() {
+                        int time = (int) ((SystemClock.elapsedRealtime() - Test.this.baseTimer) / 1000);
+                        String hh = new DecimalFormat("00").format(time / 3600);
+	
+                        String mm = new DecimalFormat("00").format(time % 3600 / 60);
+	
+                        String ss = new DecimalFormat("00").format(time % 60);
+	
+                        String timeFormat = new String(hh + "时" + mm + "分" + ss + "秒");
+	
+                        finaltimestr = timeFormat;
+	
+                        Log.d(TAG,"finaltimerstr : " + finaltimestr);
+	
+                        runOnUiThread(new Runnable() {
+	
+                            @Override
+	
+                            public void run() {
+	
+//                                Log.d(TAG,"runonuithread start");
+	
+                                mtimeview.setText(finaltimestr);
+	
+                            }
+	
+                        });
+	
+                    }
+	
+                };
+	
+                timer.schedule(task, 0, 1000);
+	
+            }
+	
+        }.start();

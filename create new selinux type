@@ -1,0 +1,21 @@
+device/qcom/sepolicy/vendor/common/file.te		---new type:
+type sysfs_poweroff_leds, fs_type, sysfs_type, mlstrustedobject;
+
+
+device/qcom/sepolicy/vendor/common/file_contexts        ---bind 节点:
+/sys/devices/platform/gpioleds/leds/green/brightness u:object_r:sysfs_poweroff_leds:s0
+
+device/qcom/sepolicy/vendor/common/healthd.te		---set permission:
+allow system_app sysfs_poweroff_leds:file { open getattr read write };
+
+
+device/qcom/sepolicy/vendor/common/system_app.te	(*)
+
+type name :sysfs_poweroff_leds
+
+
+
+
+
+
+

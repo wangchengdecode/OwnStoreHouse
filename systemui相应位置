@@ -1,0 +1,10 @@
+
+亮度条过渡至桌面：packages/SystemUI/res/layout/status_bar_toggle_slider.xml
+
+packages/SystemUI/res/values/dimens.xml
+
+packages/SystemUI/src/com/android/systemui/statusbar/policy/BrightnessMirrorController.java 
+
+亮度条在设置中： packages/SystemUI/res/layout/quick_settings_brightness_dialog.xml
+
+packages/SystemUI/src/com/android/systemui/settings/BrightnessDialog.java 

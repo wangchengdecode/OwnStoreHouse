@@ -1,0 +1,35 @@
+	public static int FindCameraBackorFront()
+	
+	{
+	
+		int cameraCount = 0;
+	
+		Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+	
+		cameraCount = Camera.getNumberOfCameras();
+	
+		if(cameraCount == 2) return -1;    //2 camera
+	
+		else { //only one camera       	   //1 camera
+	
+			for (int camIdx = 0; camIdx < cameraCount; camIdx++) {
+	
+				Camera.getCameraInfo(camIdx, cameraInfo); // get camerainfo
+	
+				if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
+	
+					return 0;   //back
+	
+				} else if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+	
+					return 1;	//front
+	
+				}
+	
+			}
+	
+		}
+	
+		return -2;// 0 camera
+	
+	}
