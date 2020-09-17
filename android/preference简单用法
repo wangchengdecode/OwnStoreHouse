@@ -1,0 +1,10 @@
+        
+SharedPreferences preferences;
+preferences = getSharedPreferences("timefile", MODE_PRIVATE);//拿preference中的数据，文件名timefile
+final String lasttime = preferences.getString("lasttime", "还未测试");//String名lasttime。默认值"还未测试"
+
+
+sharedPreferences = getSharedPreferences("timefile",MODE_PRIVATE);
+        meditor = sharedPreferences.edit();
+            meditor.putString("lasttime",finaltimestr);
+            meditor.commit();

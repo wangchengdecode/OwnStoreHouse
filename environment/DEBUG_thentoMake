@@ -1,0 +1,5 @@
+. build/envsetup.sh 
+Lunch msm8953_64-userdebug //loadEnviroment
+make update-api | tee update-api.log (First, modify system resources)
+Make  -j`nproc` 2>&1 | tee build.log 编译全部
+重新编译：rm -rf out 或 make clean 后执行make指令

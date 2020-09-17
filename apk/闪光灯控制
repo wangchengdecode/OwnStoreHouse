@@ -1,0 +1,23 @@
+    public synchronized  void turnLightOn() {//打开闪光灯
+        if (mCamera == null) {
+            return;
+        }
+        Camera.Parameters mParameters = mCamera.getParameters();
+        if (mParameters == null) {
+            return;
+        }
+        mParameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+        mCamera.setParameters(mParameters);
+    }
+
+    public synchronized  void turnLightOff() {//关闭闪光灯
+        if (mCamera == null) {
+            return;
+        }
+        Camera.Parameters mParameters = mCamera.getParameters();
+        if (mParameters == null) {
+            return;
+        }
+        mParameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+        mCamera.setParameters(mParameters);
+    }

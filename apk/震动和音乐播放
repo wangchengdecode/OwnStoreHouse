@@ -1,0 +1,10 @@
+注意权限申请！
+ mvibrator = (Vibrator) getApplication().getSystemService(Service.VIBRATOR_SERVICE);//震动
+                  
+ mvibrator.vibrate(new long[]{500,1000,500,2000}, 1);//震动周期
+                    
+mmediaPlayer = MediaPlayer.create(EngineeringCamera.this, R.raw.agingtest_test);//类名，音乐文件
+                    
+mmediaPlayer.setLooping(true);//循环
+                   
+ mmediaPlayer.start();
