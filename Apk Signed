@@ -1,7 +1,0 @@
-
-java  -Djava.library.path='/home/server1/wangcheng/code/h4_latest_debug/prebuilts/sdk/tools/linux/lib64' -jar '/home/server1/wangcheng/code/h4_latest_debug/prebuilts/sdk/tools/lib/signapk.jar'  '/home/server1/wangcheng/code/h4_latest_debug/build/target/product/security/default/platform.x509.pem' '/home/server1/wangcheng/code/h4_latest_debug/build/target/product/security/default/platform.pk8'  '/home/server1/wangcheng/code/h4_latest_debug/out/target/product/msm8953_64/system/app/GosuncnZFYFactoryTest/GosuncnZFYFactoryTest.apk'    '/home/server1/wangcheng/code/h4_latest_debug/out/target/product/msm8953_64/system/app/GosuncnZFYFactoryTest/GosuncnZFYFactoryTest_signed.apk'
-
-mv '/home/server1/wangcheng/code/h4_latest_debug/out/target/product/msm8953_64/system/app/GosuncnZFYFactoryTest/GosuncnZFYFactoryTest.apk' '/home/server1/wangcheng/code/h4_latest_debug/out/target/product/msm8953_64/system/app/GosuncnZFYFactoryTest/GosuncnZFYFactoryTest_unsigned.apk'
-mv '/home/server1/wangcheng/code/h4_latest_debug/out/target/product/msm8953_64/system/app/GosuncnZFYFactoryTest/GosuncnZFYFactoryTest_signed.apk' '/home/server1/wangcheng/code/h4_latest_debug/out/target/product/msm8953_64/system/app/GosuncnZFYFactoryTest/GosuncnZFYFactoryTest.apk'
-
-
