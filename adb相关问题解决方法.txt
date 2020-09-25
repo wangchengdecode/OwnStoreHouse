@@ -1,0 +1,115 @@
+windows端查询端口与杀死进程：
+
+netstat -ano | findstr 5037
+tasklist /fi “PID eq 3666”
+taskkill /pid 3666 /f
+
+编译指令：mmm system/core/adb (linux)
+
+make host_cross_adb (windows)
+
+PC HOST端，adb server和adb client的端口：默认5037
+
+adb server和adbd的端口，默认5555
+
+busybox 查询下设备端口
+
+根据端口查询进程：sudo lsof -i:5037
+
+查询端口：netstat -nao | grep -E ‘5037|5555′
+
+devices列表获取流程：
+adb_client.cpp: _adb_connect: host:devices
+adb_io.cpp
+SendProtocolString -> adb server
+ReadProtocolString <- adb server
+
+USB是否可以对sn过滤：
+adb D 07-06 17:32:05 21931 21933 transport.cpp:1124] transport: 0x7f571c010a80 init’ing for usb_handle 0x7f571c010940 (sn=’2318e4da’)
+usb_linux.c  /sys/bus/usb/devices/%s/serial 默认获取serial；
+
+这里可以尝试从一个特殊节点获取信息后，做型号判断处理；
+
+从终端日志，确认运行的adb不是编译出的，而是环境变量设置的。
+停止当前运行的，拷贝编译出的到环境变量路径。
+断开usb线后，设置好日志环境变量后，清空/tmp/adb*日志文件后，再次插入，
+运气较好，日志打印出来了，如下：
+adb D 07-07 09:17:29 13693 13695 usb_linux.cpp:526] [ usb located new device /dev/bus/usb/001/049 (130/2/1) ]
+adb D 07-07 09:17:29 13693 13695 usb_linux.cpp:549] [ usb opened /dev/bus/usb/001/049, fd=10]
+adb D 07-07 09:17:29 13693 13695 usb_linux.cpp:571] !!! register_device, serial:2318e4da , serial_path:/sys/bus/usb/devices/1-9.4/serial
+adb D 07-07 09:17:29 13693 13695 transport.cpp:1124] transport: 0x7f2b9c010d00 init’ing for usb_handle 0x7f2b9c010940 (sn=’2318e4da’)
+可以确认串号了，然后到对应目录下，查询更多信息，如下：
+wmd@wmd-pc:/sys/bus/usb/devices/1-9.4$ cat serial
+2318e4da
+wmd@wmd-pc:/sys/bus/usb/devices/1-9.4$ cat manufacturer
+Gosuncn
+wmd@wmd-pc:/sys/bus/usb/devices/1-9.4$ cat product
+MSM8953-QRD _SN:9F9E1961
+wmd@wmd-pc:/sys/bus/usb/devices/1-9.4$ cat version
+2.00
+wmd@wmd-pc:/sys/bus/usb/devices/1-9.4$ cat idProduct
+901d
+wmd@wmd-pc:/sys/bus/usb/devices/1-9.4$ cat idVendor
+05c6
+结论：可以根据这些信息来过滤设备。
+
+设备端接入后处于offline， 需要想办法通知host端，将自己移除掉；
+
+ 
+
+打开日志：
+
+设备端： adb shell setprop persist.adb.trace_mask 1 日志路径：/data/adb
+
+PC HOST端：export ADB_TRACE=1(ADB_TRACE=all)日志路径：/tmp/adb*
+
+数据包调试宏：adb.h： #define DEBUG_PACKETS 1
+
+ 
+
+ 
+
+adb shell打开关闭wifi
+adb shell svc wifi enable打开wifi
+adb shell svc wifi disable关闭wifi
+adb shell打开关闭数据data
+打开数据网络：adb shell svc data enable
+关闭数据网络：adb shell svc data disable
+adb shell 打开USB模式
+设置为adb模式：adb shell svc usb setFunction adb
+设置为mtp模式： shell svc usb setFunction mtp
+设置keep stay on：
+adb shell svc power stayon
+ 
+
+USB充电控制：/sys/class/power_supply/battery/chargin_enabled
+链接：
+
+ADB结构及代码分析
+
+android usb adb流程
+
+Android adb实现原理
+
+ADB源码分析（一）
+
+adb源码分析
+
+【RK3399】【Android7.1】关于adb的一些问题
+
+ADB(六)_调试ADB（ADB设置自身日志的代码梳理和设置ADB自身日志可见）
+https://blog.csdn.net/weixin_38140931/article/details/104027961?utm_medium=distribute.pc_relevant_right.none-task-blog-BlogCommendFromMachineLearnPai2-11.nonecase&depth_1-utm_source=distribute.pc_relevant_right.none-task-blog-BlogCommendFromMachineLearnPai2-11.nonecase
+Android ADB实现解析
+https://blog.csdn.net/u010223349/article/details/41120255
+基于Android10的adb install流程分析
+https://blog.csdn.net/chishi199433/article/details/103925833
+Pm install App流程
+http://blog.sina.com.cn/s/blog_97eedec40101f7ed.html
+android adb 流程原理代码分析（一）
+https://www.cnblogs.com/codeking100/p/10344069.html
+
+ 
+
+AdbWinApi
+
+https://gitee.com/bw/BestAdb/tree/master/AdbWinApi
