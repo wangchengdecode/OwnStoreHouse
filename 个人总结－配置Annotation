@@ -1,0 +1,32 @@
+https://blog.csdn.net/weixin_34015860/article/details/91921099
+
+
+１．Android Studio 3.0以上版本不支持android-apt注入
+选用annotationProccessor方法
+
+
+２．module的gradle中添加：
+def AAVersion='4.4.0'
+android.defaultConfig 中增加：
+ 
+javaCompileOptions {
+    annotationProcessorOptions {
+        includeCompileClasspath = true
+        //这里的包名和applicationId一致
+        arguments = [
+                'resourcePackageName'  : android.defaultConfig.applicationId
+                , "androidManifestFile": "$projectDir/src/main/AndroidManifest.xml".toString()
+        ]
+    }
+}
+依赖jar包增加如下：
+亲测，AS 3.2版本中只有这两个版本的AA可以使用，其他的报错。
+def AAVersion = "4.4.0"
+//def AAVersion = "4.3.1"
+dependencies {
+    // 增加android annotation 注解框架，增强开发效率
+    annotationProcessor group: 'org.androidannotations', name: 'androidannotations', version: "$AAVersion"
+    implementation group: 'org.androidannotations', name: 'androidannotations-api', version: "$AAVersion"
+}
+
+３．Ｍanifeast中类名增加下划线_
