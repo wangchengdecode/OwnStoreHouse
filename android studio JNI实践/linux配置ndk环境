@@ -1,0 +1,7 @@
+https://jingyan.baidu.com/article/046a7b3eac8e2af9c27fa98d.html
+
+sudo vim etc/profile
+最后加入NDKROOT = "/home/.../(ndk下载后解压的目录:如：android-ndk32-r10)"
+	export PATH=$NDKROOT:$PATH
+esc,:wq
+source /etc/profile之后，输入ndk-build生效
