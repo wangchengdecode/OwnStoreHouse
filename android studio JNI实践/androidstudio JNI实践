@@ -34,6 +34,13 @@ externalNativeBuild{
 	}
     }
 
+/*  cd / ,
+　　　　source etc/profile后,
+　　到jni父目录执行ndk-build 生成动态so库
+*/
+
+
+
 6.在JniDemo中static{ System.loadLibrary("jni-demo")｝加载so库，名称为android.mk中定义
 
 7．rebuild一下项目
