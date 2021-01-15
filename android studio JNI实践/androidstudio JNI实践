@@ -1,0 +1,40 @@
+https://blog.csdn.net/wzhseu/article/details/79683045
+
+下载并配置NDK
+
+
+1．新建一个类，声明一个native方法
+
+package com.example.myaplication.JniDemo
+public class JniDemo{
+
+	public native static String Hello();
+
+}
+
+2.open interminal : javah -jni com.example.myaplication.JniDemo
+生成.h头文件
+
+3.新建jni文件夹，在jni中新建一个.c文件，用以实现2中的方法
+
+4.在jni中新建android.mk文件
+LOCAL_PATH := $(call my-dir)
+
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := jni-demo　／／自定义so库名称
+LOCAL_SRC_FILES := demo.c　／／引用参与编译的.c文件
+
+include $(BUILD_SHARED_LIBRARY)
+
+5.在build.gradle下配置
+externalNativeBuild{
+	ndkBuild{
+	   path 'jni/Android.mk'
+	}
+    }
+
+6.在JniDemo中static{ System.loadLibrary("jni-demo")｝加载so库，名称为android.mk中定义
+
+7．rebuild一下项目
+		
