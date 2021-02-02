@@ -1,0 +1,36 @@
+
+
+onResume中判断TextureView是否可用，不可用就给TextureView设置监听，可用时才openCamera
+openCamera中先得到相机服务CameraManager，由CameraManager得到相机的属性信息CameraCharacteristics，而CameraCharacteristics包含有配置流信息StreamConfigurationMap等，根据TextureView的尺寸及宽高比从中选择合适的分辨率尺寸来设置预览尺寸和录制/拍照尺寸等信息，需要处理预览方向及拉伸异常。
+
+注意：此时尚未通过CameraManager真正打开相机，但已经可以获取这些信息并进行配置
+
+    通过CameraManager真正打开相机，得到CameraDevice对象实例，在相机设备状态回调成功时开启预览。
+
+（1）将PreviewSize（由TextureView得到）设置为SurfaceTexture（由TextureView得到）的缓冲区尺寸，并得到对应Surface。
+本人觉得此操作可以提前到真正打开相机前
+
+（2）CameraDevice创建CameraDevice.TEMPLATE_PREVIEW预览类型的CaptureRequest.Builder对象实例，并添加刚才的Surface对象
+mPreviewBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
+mPreviewBuilder.addTarget(previewSurface);
+
+（3）CameraDevice创建相机会话，需要刚才的Surface对象，在会话回调方法成功时得到CameraCaptureSession对象实例，
+对mPreviewBuilder设置一些对焦模式等参数后，mPreviewSession通过setRepeatingRequest以启动预览
+mPreviewSession = session;
+setUpCaptureRequestBuilder(mPreviewBuilder);
+mPreviewSession.setRepeatingRequest(mPreviewBuilder.build(), null, mBackgroundHandler);
+预览流程.PNG
+
+作者：WaterYuan
+链接：https://www.jianshu.com/p/645e048cb491
+
+    首先获取CameraManager，调用其getCameraIdList()获取所有的CameraId，从中选择需要的，根据ID找到对应的CameraDevice
+    获取到该相机的CameraCharacteristics，获取各属性（相机取景方向，可支持的输出图像大小），根据属性配置显示的大小，并根据当前屏幕旋转位置和相机位置调整预览和拍照的方向
+    创建后台线程和Handler对象，提供给Camera用于后台操作
+    创建CameraDevice.StateCallback对象，在开启和关闭的回调中启动和释放资源，并创建预览
+    开启相机前动态检查相机权限，获得权限后通过manager的open方法开启相机
+    创建CameraCaptureSession.CaptureCallback对象，在回调中根据返回结果进行相应操作
+    利用CameraDevice创建CaptureRequest.builder对象进行配置，并创建Session对话，在onConfigured的回调中启动预览
+    拍照时与⑦基本相同，只是request的目标Surface改变，并且调用的是Session的capture()方法
+
+https://wiki.jikexueyuan.com/project/android-actual-combat-skills/android-hardware-camera2-operating-guide.html
