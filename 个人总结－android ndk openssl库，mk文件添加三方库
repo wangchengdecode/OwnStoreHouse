@@ -1,0 +1,8 @@
+Android下openssl编译和使用：https://blog.csdn.net/zoujin6649/article/details/89891720?spm=1001.2014.3001.5501
+需要下载ndk,配置完mk文件后，需要source /etc/profile，根据需要的内核编译openssl库即可得到对应的so　a文件
+头文件添加方式jni/lib/include整个文件夹拖入项目。mk中LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
+
+.a文件，local_src_files  prebuilt_static_library 静态库　　最终模块local_static_libraries
+.so文件，local_src_files　prebuilt_shared_libaray　动态库    最终模块local_shared_libraries
+
+
